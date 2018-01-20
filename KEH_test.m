@@ -24,28 +24,29 @@ downsamplefreq = 600;
 % 3.2. Use EEGLab to read in the data, filter and downsample
 for v = 1:length(indata)
    filename = indata(v).name;
-   
+
    % 3.2.1. Load Data
    EEG_raw = pop_readbdf([indir filename], [], 70, 67'); % Read in section of data
    EEG_raw = pop_rmbase( EEG_raw, []); % Remove Mean of each channel
    EEG_raw.data = double(EEG_raw.data);
-   
+
    % 3.2.2. Filter
-   EEG_filt = pop_eegfiltnew(EEG_raw,hpfreq,lpfreq,[],[],[],plotResponse);
+   EEG_filt = pop_eegfiltnew(EEG_raw,hpfreq,[],[],[],[],plotResponse); % Filter separately
+   EEG_filt = pop_eegfiltnew(EEG_raw,[],lpfreq,[],[],[],plotResponse); % for different transition bands
    EEG_filt = pop_eegfiltnew(EEG_raw,notchfreq-1,notchfreq+1,[],1,[],plotResponse);
-   
+
    % 3.2.3. Downsample
    EEG_filt = pop_resample(EEG_filt, downsamplefreq);
    EEG_filt = pop_saveset(EEG_filt,'filename',[filename,'_filt'],'filepath',outdir,'savemode','onefile','version','7.3');
-    
+
    % 3.2.4. Export to FT
    dat = eeglab2fieldtrip(EEG_filt,'preprocessing','none');
-   
+
    %% 4. Define the trials based on triggers
 
    % 4.1. Build trl-Structure to define trials
-   cfg=[]; 
-   cfg.dataset=EEG_filt; 
+   cfg=[];
+   cfg.dataset=EEG_filt;
    cfg.trialdef.eventvalue=[49];
    cfg.trialdef.prestim=1; % Seconds before the stimulus
    cfg.trialdef.poststim=1; % Seconds after the stimulus
@@ -59,10 +60,10 @@ cfg.trl = dat.cfg.trl;
 
 dat_trl = ft_redefinetrial(cfg,dat);
 
-%% 
+%%
 ft_databrowser([],dat_trl);
 
-%% 
+%%
 cfg = [];
 ERP = ft_timelockanalysis(cfg,dat_trl);
 

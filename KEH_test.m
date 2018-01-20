@@ -32,8 +32,8 @@ for v = 1:length(indata)
 
    % 3.2.2. Filter
    EEG_filt = pop_eegfiltnew(EEG_raw,hpfreq,[],[],[],[],plotResponse); % Filter separately
-   EEG_filt = pop_eegfiltnew(EEG_raw,[],lpfreq,[],[],[],plotResponse); % for different transition bands
-   EEG_filt = pop_eegfiltnew(EEG_raw,notchfreq-1,notchfreq+1,[],1,[],plotResponse);
+   EEG_filt = pop_eegfiltnew(EEG_filt,[],lpfreq,[],[],[],plotResponse); % for different transition bands
+   EEG_filt = pop_eegfiltnew(EEG_filt,notchfreq-1,notchfreq+1,[],1,[],plotResponse);
 
    % 3.2.3. Downsample
    EEG_filt = pop_resample(EEG_filt, downsamplefreq);

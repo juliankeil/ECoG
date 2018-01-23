@@ -38,7 +38,7 @@ for v = 1:length(indata)
 
    % 3.2.3. Downsample
    EEG_filt = pop_resample(EEG_filt, downsamplefreq);
-   EEG_filt = pop_saveset(EEG_filt,'filename',[filename,'_filt'],'filepath',outdir,'savemode','onefile','version','7.3');
+   EEG_filt = pop_saveset(EEG_filt,'filename',[indata(v).name,'_filt'],'filepath',outdir,'savemode','onefile','version','7.3');
 
    % 3.2.4. Export to FT
    dat{v} = eeglab2fieldtrip(EEG_filt,'preprocessing','none');

@@ -51,6 +51,7 @@ for v = 1:length(indata)
    % 3.2.4. Export to FT
    dat{v} = eeglab2fieldtrip(EEG_filt,'preprocessing','none');
    dat{v}.event = EEG_filt.event;
+   dat{v}.elec.unit = 'mm';
    %% 4. Define the trials based on triggers
 
    % 4.1. Build trl-Structure to define trials
@@ -71,24 +72,24 @@ for v = 1:length(dat); % Set for Dataset
 
     dat_trl{v} = ft_redefinetrial(cfg,dat{v});
 
-%     %%
+%     %% Some Plotting
 %     cfg = [];
 %     cfg.viewmode = 'vertical';
 %     ft_databrowser([],dat_trl{v});
 
     %%
-    vis = find(dat_trl{v}.trialinfo == 33);
-    aud = find(dat_trl{v}.trialinfo == 40);
-    sifi = find(dat_trl{v}.trialinfo == 41);
+    vis{v} = find(dat_trl{v}.trialinfo == 33);
+    aud{v} = find(dat_trl{v}.trialinfo == 40);
+    sifi{v} = find(dat_trl{v}.trialinfo == 41);
 
     cfg = [];
-    cfg.trials = vis;
+    cfg.trials = vis{v};
     ERP_v{v} = ft_timelockanalysis(cfg,dat_trl{v});
 
-    cfg.trials = aud;
+    cfg.trials = aud{v};
     ERP_a{v} = ft_timelockanalysis(cfg,dat_trl{v});
 
-    cfg.trials = sifi;
+    cfg.trials = sifi{v};
     ERP_s{v} = ft_timelockanalysis(cfg,dat_trl{v});
 
     cfg = [];
@@ -105,6 +106,13 @@ for v = 1:length(dat); % Set for Dataset
     ERP_bl_add{v} = ft_math(cfg,ERP_bl_s{v},ERP_bl_v{v},ERP_bl_a{v});
 
     % Find the Channel with the strongest superadditive response (A1V1 - (A1 + V1))
+%     figure;
+%     for i = 1:size(ERP_bl_s{2}.avg,1)
+% 
+%         subplot(10,6,i); plot(ERP_bl_s{2}.time,ERP_bl_s{2}.avg(i,:));
+%         title(i)
+%     end
+    
     for c = 1:(size(ERP_bl_add{v}.avg,1)-3)
         [val(c) time(c)] = min(ERP_bl_add{v}.avg(c));
     end
@@ -130,18 +138,18 @@ for v = 1:length(dat);
     cfg.width = 5;
     cfg.pad='nextpow2';
 
-    cfg.trials = vis;
+    cfg.trials = vis{v};
     WLT_trl_v{v}=ft_freqanalysis(cfg,dat_trl{v});
-    cfg.trials = aud;
+    cfg.trials = aud{v};
     WLT_trl_a{v}=ft_freqanalysis(cfg,dat_trl{v});
-    cfg.trials = sifi;
+    cfg.trials = sifi{v};
     WLT_trl_s{v}=ft_freqanalysis(cfg,dat_trl{v});
 
     cfg = [];
     cfg.channel = minchan(v);
     cfg.baseline = [-.5 0];
     cfg.baselinetype = 'db';
-    cfg.zlim = [- 5 5];
+    cfg.zlim = [-5 5];
 
     figure;ft_singleplotTFR(cfg,WLT_trl_v{v});
     figure;ft_singleplotTFR(cfg,WLT_trl_a{v});

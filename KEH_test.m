@@ -104,7 +104,11 @@ for v = 1:length(dat); % Set for Dataset
     cfg.operation = 'x1-(x2+x3)';
     cfg.parameter = 'avg';
     ERP_bl_add{v} = ft_math(cfg,ERP_bl_s{v},ERP_bl_v{v},ERP_bl_a{v});
-
+end
+    
+%%
+for v = 1
+    
     % Find the Channel with the strongest superadditive response (A1V1 - (A1 + V1))
 %     figure;
 %     for i = 1:size(ERP_bl_s{2}.avg,1)
@@ -112,7 +116,7 @@ for v = 1:length(dat); % Set for Dataset
 %         subplot(10,6,i); plot(ERP_bl_s{2}.time,ERP_bl_s{2}.avg(i,:));
 %         title(i)
 %     end
-    
+
     for c = 1:(size(ERP_bl_add{v}.avg,1)-3)
         [val(c) time(c)] = min(ERP_bl_add{v}.avg(c));
     end
@@ -144,16 +148,20 @@ for v = 1:length(dat);
     WLT_trl_a{v}=ft_freqanalysis(cfg,dat_trl{v});
     cfg.trials = sifi{v};
     WLT_trl_s{v}=ft_freqanalysis(cfg,dat_trl{v});
+end
 
+%%
+for v = 1:2;
     cfg = [];
     cfg.channel = minchan(v);
-    cfg.baseline = [-.5 0];
+    cfg.baseline = [-.5 -.1];
     cfg.baselinetype = 'db';
     cfg.zlim = [-5 5];
 
-    figure;ft_singleplotTFR(cfg,WLT_trl_v{v});
-    figure;ft_singleplotTFR(cfg,WLT_trl_a{v});
-    figure;ft_singleplotTFR(cfg,WLT_trl_s{v});
+    figure;
+    subplot(3,1,1);ft_singleplotTFR(cfg,WLT_trl_v{v});
+    subplot(3,1,2);ft_singleplotTFR(cfg,WLT_trl_a{v});
+    subplot(3,1,3);ft_singleplotTFR(cfg,WLT_trl_s{v});
 end
 %% Search Triggers and Latencies
 for i = 1:length(EEG_raw.event)

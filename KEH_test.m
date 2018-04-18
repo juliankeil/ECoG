@@ -15,10 +15,14 @@ inref(2) = 52;
 indata(3) = dir('E:\ECoG\Raw\F_B\a0024.BDF');
 intrig(3) = 55;
 inref(3) = 52;
+indata(4) = dir('E:\ECoG\Raw\A0073\a0073.BDF');
+intrig(4) = 53;
+inref(4) = 51;
 
 indir{1} = 'E:\ECoG\Raw\DW001\';
 indir{2} = 'E:\ECoG\Raw\A0058\';
 indir{3} = 'E:\ECoG\Raw\F_B\';
+indir{4} = 'E:\ECoG\Raw\A0073\';
 
 % 2.2. Set Output Directory
 outdir = 'E:\ECoG\Preproc\';

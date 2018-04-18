@@ -12,14 +12,20 @@ inref(1) = 67;
 indata(2) = dir('E:\ECoG\Raw\A0058\a0058.BDF');
 intrig(2) = 54;
 inref(2) = 52;
-
+indata(3) = dir('E:\ECoG\Raw\F_B\a0024.BDF');
+intrig(3) = 55;
+inref(3) = 52;
 
 indir{1} = 'E:\ECoG\Raw\DW001\';
 indir{2} = 'E:\ECoG\Raw\A0058\';
+indir{3} = 'E:\ECoG\Raw\F_B\';
 
 % 2.2. Set Output Directory
 outdir = 'E:\ECoG\Preproc\';
 
+% 2.3. Start EEGlab and quit
+eeglab
+close all
 %% 3. Loop Data, load and filter
 
 % 3.1. Filter and Sampling-Settings

@@ -56,7 +56,7 @@ for v = 1:length(indata)
    EEG_filt = pop_saveset(EEG_filt,'filename',[indata(v).name],'filepath',outdir,'savemode','onefile','version','7.3');
 end
 %% Load Preprocessed Data
-for v = 1:length(indata)
+for v = 1:3%length(indata)
    EEG_filt = pop_loadset('filename',[indata(v).name(1:end-4),'.set'],'filepath',outdir); 
    % 3.2.4. Export to FT
    dat{v} = eeglab2fieldtrip(EEG_filt,'preprocessing','none');
@@ -134,6 +134,7 @@ for v = 1
 
     cfg = [];
     cfg.channel = minchan(v);
+    cfg.xlim = [-.2 .5]
     figure;ft_singleplotER(cfg,ERP_bl_v{v},ERP_bl_a{v},ERP_bl_s{v});
 
     cfg = [];
@@ -167,6 +168,7 @@ for v = 1:2;
     cfg.baseline = [-.5 -.1];
     cfg.baselinetype = 'db';
     cfg.zlim = [-5 5];
+    cfg.xlim = [-.2 .5]
 
     figure;
     subplot(3,1,1);ft_singleplotTFR(cfg,WLT_trl_v{v});
